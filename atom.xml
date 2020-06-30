@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Karzert&#39;s Blog</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://karzert.github.io/"/>
+  <updated>2018-09-14T08:07:10.000Z</updated>
+  <id>http://karzert.github.io/</id>
+  
+  <author>
+    <name>Karzert</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>统一建模语言 UML</title>
+    <link href="http://karzert.github.io/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/"/>
+    <id>http://karzert.github.io/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/</id>
+    <published>2018-09-13T03:10:47.000Z</published>
+    <updated>2018-09-14T08:07:10.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-什么是统一建模语言"><a href="#1-什么是统一建模语言" class="headerlink" title="1 什么是统一建模语言"></a>1 什么是统一建模语言</h2><blockquote><p>统一建模语言（UML是 Unified Modeling Language的缩写）是用来对软件密集系统进行可视化建模的一种语言。UML为面向对象开发系统的产品进行说明、可视化、和编制文档的一种标准语言。</p><p>统一建模语言 (UML)是非专利的第三代建模和规约语言。 UML是在开发阶段，说明，可视化，构建和书写一个面向对象软件密集系统的制品的开放方法。UML展现了一系列最佳工程实践，这些最佳实践在对大规模，复杂系统进行建模方面,特别是在软件架构层次已经被验证有效。</p><p>UML可以贯穿软件开发周期中的每一个阶段。被OMG采纳作为业界的标准。</p><p>UML最适于数据建模，业务建模，对象建模，组件建模。</p><p>UML作为一种模型语言，它使开发人员专注于建立产品的模型和结构，而不是选用什么程序语言和算法实现。当模型建立之后，模型可以被UML工具转化成指定的程序语言代码。</p></blockquote><h2 id="2-为什么要建模"><a href="#2-为什么要建模" class="headerlink" title="2 为什么要建模"></a>2 为什么要建模</h2><blockquote><p>建模是了为了能够更好的理解正在开发的系统</p><p>通过建模达到下面的目的</p><ol><li>模型有助于按照实际情况或按照所需的样式对系统进行可视化</li><li>模型能够规约系统的结构或行为</li><li>模型给出了构造系统的模板</li><li>模型对做出的决策进行文档化</li></ol></blockquote><h2 id="3-细说UML"><a href="#3-细说UML" class="headerlink" title="3 细说UML"></a>3 细说UML</h2><p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml1.png" alt></p><h4 id="3-1-类与抽象类"><a href="#3-1-类与抽象类" class="headerlink" title="3.1 类与抽象类"></a>3.1 类与抽象类</h4><p>首先看一张图，这张图是引用《大话设计模式》书中的图，首先看‘动物’矩形框，它就代表一个类（class）。类图分为三层，第一层显示类的名称，如果是抽象类，就用斜体显示。第二层是类的特性，通常就是字段和属性。第三层是类的操作，通常是方法和行为。注意前面的符号，‘+’表示public，‘-’表示private，‘#’表示protected。</p><p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml2.png" alt></p><h4 id="3-2-接口"><a href="#3-2-接口" class="headerlink" title="3.2 接口"></a>3.2 接口</h4><p>然后看左下角的‘飞翔’，它表示一个接口图，与类图的区别主要是顶端有&lt;&lt; interface &gt;&gt;显示。第一行是接口名称，第二行是接口方法。接口还有另一种表示方法，俗称棒棒糖表示法，就是唐老鸭实现了‘讲人话’的接口。</p><p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml3.png" alt></p><h4 id="3-3-继承"><a href="#3-3-继承" class="headerlink" title="3.3 继承"></a>3.3 继承</h4><p>接下来就说一下类与类，类与接口之间的关系了。首先注意动物、鸟、鸭、唐老鸭之间关系符号。因为他们都是继承关系，所以继承关系用空心三角形+实现来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml4.png" alt></p><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-4-实现"><a href="#3-4-实现" class="headerlink" title="3.4 实现"></a>3.4 实现</h4><p>这几种鸟中，大雁是最能飞的，它实现了飞翔接口。实现飞翔接口用空心三角形+虚线来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml5.png" alt></p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="symbol">WideGoose</span> <span class="symbol">implements</span> <span class="symbol">IFly</span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-5-关联（引用）"><a href="#3-5-关联（引用）" class="headerlink" title="3.5 关联（引用）"></a>3.5 关联（引用）</h4><p>然后是企鹅和气候两个类，企鹅是很特别的鸟，会游不会飞。更重要的是，它与气候有很大的关联。我们不去讨论为什么北极没有企鹅，为什么它们要每年长途跋涉。总之，企鹅需要‘知道’气候的变化，需要‘了解’气候规律。当一个类‘知道’另一个类是，可以用关联（association）。关联关系用实线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml6.png" alt></p><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Penguin</span> <span class="keyword">extends</span> <span class="title">Bird</span></span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="type">Climate</span> climate;<span class="comment">//在企鹅Penguin中，引用到气候Climate对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-6-聚合"><a href="#3-6-聚合" class="headerlink" title="3.6 聚合"></a>3.6 聚合</h4><p>再来看大雁与雁群这两个类，大雁是群居动物，每只大雁都是属于一个雁群，一个雁群可以有很多只大雁。所以它们之间就满足聚合（Aggregation）关系。聚合表示一种弱的‘拥有’关系，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。聚合关系用空心的菱形+实线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml7.png" alt></p><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="symbol">WideGooseAggregate</span>&#123;</span><br><span class="line"><span class="keyword">private</span> WideGoose[] <span class="built_in">array</span>WideGoose;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-7-合成（组合）"><a href="#3-7-合成（组合）" class="headerlink" title="3.7 合成（组合）"></a>3.7 合成（组合）</h4><p>合成（Composition，也有翻译成‘组合’的）是一种强的‘拥有’关系，体现了严格的部分和整体的关系，部分和整体的生命周期一样。在这里鸟的其翅膀就是合成（组合）关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。合成关系用实心的菱形+实线箭头来表示。另外，你会注意到合成关系的连线两端还有一个数字‘1’和数字‘2’，这被称为基数。表明这一段的类可以有几个实例，很显然，一个鸟应该有两只翅膀。如果一个类可能有无数个实例，则就用‘n’来表示。关联关系、聚合关系也可以有基数的。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml8.png" alt></p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>&#123;</span></span><br><span class="line"><span class="keyword">private</span> Wing wing;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Bird</span><span class="params">()</span></span>&#123;</span><br><span class="line">wing = <span class="keyword">new</span> Wing();<span class="comment">//在鸟Bird中，初始化时，实例化翅膀Wing，它们之间同时生成</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h4 id="3-8-依赖"><a href="#3-8-依赖" class="headerlink" title="3.8 依赖"></a>3.8 依赖</h4><p>动物几大特征，比如有新陈代谢，能繁殖。而动物要有生命力，需要氧气、水以及食物等。也就是说，动物依赖于氧气和水。他们之间是依赖关系，用虚线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml9.png" alt></p><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Animal</span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Metabolism</span>(<span class="params">Oxygen oxygen, Water water</span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;1-什么是统一建模语言&quot;&gt;&lt;a href=&quot;#1-什么是统一建模语言&quot; class=&quot;headerlink&quot; title=&quot;1 什么是统一建模语言&quot;&gt;&lt;/a&gt;1 什么是统一建模语言&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;统一建模语言（UML是 Unified M
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/categories/Java/"/>
+    
+      <category term="UML" scheme="http://karzert.github.io/categories/Java/UML/"/>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/tags/Java/"/>
+    
+      <category term="UML" scheme="http://karzert.github.io/tags/UML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>何为面向对象编程</title>
+    <link href="http://karzert.github.io/2018/09/11/%E4%BD%95%E4%B8%BA%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/"/>
+    <id>http://karzert.github.io/2018/09/11/%E4%BD%95%E4%B8%BA%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</id>
+    <published>2018-09-11T09:36:45.000Z</published>
+    <updated>2018-09-13T03:26:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-面向对象编程概述"><a href="#1-面向对象编程概述" class="headerlink" title="1 面向对象编程概述"></a>1 面向对象编程概述</h2><p>面向对象程序设计（Object-oriented Programming）是种具有对象概念的程序编程规范，同时也是一种程序开发的方法。它可能包含数据、属性、代码与方法。对象则指的是类的实例。它将对象作为程序的基本单元，将程序和数据封装其中，以提高软件的重用性，灵活性和扩展性，对象里的程序可以访问及经常修改对象相关联的数据。在面向对象程序编程里，计算机程序会被设计成彼此相关的对象。</p><p>面向对象程序设计可以看做一种在程序中包含各种独立而又互相调用的对象的思想，这与传统的思想刚好相反：传统的程序设计主张将程序看做一系列函数的集合，或者直接就是一系列对电脑下达的指令。面向对象程序设计中的每一个对象都应该能够接受数据、处理数据并将数据传达给其他对象，因此他们都可以被看做一个小型的“机器”，即对象。目前已经被证实的是，面向对象程序设计推广了程序的灵活性和可维护性，并且在大型项目设计中广为应用。此外。支持者生成面向对象程序设计要比以往的做法更加便于学习，因为它能够让人们更简单的设计并维护程序，使得程序更加便于分析、设计、理解。反对者在某些领域对此予以否认。</p><p>当我们提到面向对象的时候，它不仅指一种程序设计方法，它更多意义上是一种程序开发方式，在这一方面，我们必须了解更多关于面向对象系统分析和面向对象设计方面的知识。</p><p>支持部分或绝大部分面向对象特性（类和实例，封装、继承、多态）的语言即可成为基于对象的或面向对象的语言。如Java，C#等。</p><h2 id="2-面向对象的三大特性"><a href="#2-面向对象的三大特性" class="headerlink" title="2 面向对象的三大特性"></a>2 面向对象的三大特性</h2><h4 id="2-1-封装"><a href="#2-1-封装" class="headerlink" title="2.1 封装"></a>2.1 封装</h4><blockquote><p>所谓封装，也就是把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。封装是面向对象的特征之一，是对象和类概念的主要特性。 简单的说，一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。在一个对象内部，某些代码或某些数据可以是私有的，不能被外界访问。通过这种方式，对象对内部数据提供了不同级别的保护，以防止程序中无关的部分意外的改变或错误的使用了对象的私有部分。</p></blockquote><h4 id="2-2-继承"><a href="#2-2-继承" class="headerlink" title="2.2 继承"></a>2.2 继承</h4><blockquote><p>所谓继承是指可以让某个类型的对象获得另一个类型的对象的属性的方法。它支持按级分类的概念。继承是指这样一种能力：它可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展。 通过继承创建的新类称为“子类”或“派生类”，被继承的类称为“基类”、“父类”或“超类”。继承的过程，就是从一般到特殊的过程。要实现继承，可以通过“继承”（Inheritance）和“组合”（Composition）来实现。继承概念的实现方式有二类：实现继承与接口继承。实现继承是指直接使用基类的属性和方法而无需额外编码的能力；接口继承是指仅使用属性和方法的名称、但是子类必须提供实现的能力。</p></blockquote><h3 id="2-3-多态"><a href="#2-3-多态" class="headerlink" title="2.3 多态"></a>2.3 多态</h3><blockquote><p>所谓多态就是指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着，虽然针对不同对象的具体操作不同，但通过一个公共的类，它们（那些操作）可以通过相同的方式予以调用。</p></blockquote><h2 id="3-面向对象编程的优点"><a href="#3-面向对象编程的优点" class="headerlink" title="3 面向对象编程的优点"></a>3 面向对象编程的优点</h2><h4 id="3-1-易维护"><a href="#3-1-易维护" class="headerlink" title="3.1 易维护"></a>3.1 易维护</h4><blockquote><p>采用面向对象思想设计的结构，可读性高，由于继承的存在，即使改变需求，那么维护也只是在局部模块，所以维护起来是非常方便和较低成本的。</p></blockquote><h4 id="3-2-易扩展"><a href="#3-2-易扩展" class="headerlink" title="3.2 易扩展"></a>3.2 易扩展</h4><blockquote><p>通过继承，我们可以大幅减少多余的代码，并扩展现有代码的用途；<br>我们可以在标准的模块上（这里所谓的”标准”指程序员之间彼此达成的协议）构建我们的程序，而不必一切从头开始。这可以减少软件开发时间并提高生产效率。</p></blockquote><h4 id="3-3-模块化"><a href="#3-3-模块化" class="headerlink" title="3.3 模块化"></a>3.3 模块化</h4><blockquote><p>封装可以定义对象的属性和方法的访问级别，通过不同的访问修饰符对外暴露安全的接口，防止内部数据在不安全的情况下被修改。这样可以使程序具备更高的模块化程度，方便后期的维护和修改。<br>同时，面向对象语言允许一个对象的多个实例同时存在，而且彼此之间不会相互干扰。</p></blockquote><h4 id="3-4-方便建模"><a href="#3-4-方便建模" class="headerlink" title="3.4 方便建模"></a>3.4 方便建模</h4><blockquote><p>虽然面向对象语言中的对象与现实生活中的对象并不是同个概念，但很多时候，往往可以使用现实生活中对象的概念抽象后稍作修改来进行建模，这大大方便了建模的过程。（但直接使用现实中的对象来建模有时会适得其反）。</p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;1-面向对象编程概述&quot;&gt;&lt;a href=&quot;#1-面向对象编程概述&quot; class=&quot;headerlink&quot; title=&quot;1 面向对象编程概述&quot;&gt;&lt;/a&gt;1 面向对象编程概述&lt;/h2&gt;&lt;p&gt;面向对象程序设计（Object-oriented Programming）是
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java设计模式之六大设计原则</title>
+    <link href="http://karzert.github.io/2018/09/10/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"/>
+    <id>http://karzert.github.io/2018/09/10/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%85%AD%E5%A4%A7%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</id>
+    <published>2018-09-10T07:45:49.000Z</published>
+    <updated>2018-09-10T08:26:36.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-设计模式六大原则"><a href="#1-设计模式六大原则" class="headerlink" title="1 设计模式六大原则"></a>1 设计模式六大原则</h2><p>面向对象设计主要是为了软件的可维护性、可拓展、可复用和灵活性好。在面对新的需求和更改的时候可以用最小的代价来达到最好的效果。</p><h2 id="1-1-开放-封闭原则"><a href="#1-1-开放-封闭原则" class="headerlink" title="1.1 开放-封闭原则"></a>1.1 开放-封闭原则</h2><blockquote><p>在我们设计的时候要尽量保持开放-封闭原则。对于增加需求等情况尽量拓展而不要对类进行修改，避免因为改修而造成不必要的麻烦。开放封闭原则是所有面向对象原则的核心。</p></blockquote><h2 id="1-2-单一职责原则"><a href="#1-2-单一职责原则" class="headerlink" title="1.2 单一职责原则"></a>1.2 单一职责原则</h2><blockquote><p>单一职责原则就是一个类只负责一个职责，仅有一个引起它变化的原因，降低类的耦合。<br>如果一个类承担的职责过多，就等于把这些职责耦合在一起，一个职责的变化就有可能使软件的各个方面都受到影响，无疑这样的非常糟糕的。如果一个类具有多余一个的职责，就应该考虑类的分离。</p></blockquote><h2 id="1-3-里式代换原则"><a href="#1-3-里式代换原则" class="headerlink" title="1.3 里式代换原则"></a>1.3 里式代换原则</h2><blockquote><p>一个软件实体如果使用的是一个父类的话，那么一定使用于其子类，而且它察觉不出父类对象和子类对象的区别。<br>也就是说在软件里面，把父类都替换成它的子类，程序的行为没有变化。<br>也正是因为这个原则，使得继承复用称为可能，只有当子类可以替换父类，软件单位的功能不受到影响时，父类才能真正的被复用，而子类也能在父类的基础上增加新的行为。里氏代换是实现开放封闭原则的具体规范。这是因为实现开放封闭原则关键是抽象，而继承关系又是抽象的一种具体实现。</p></blockquote><h2 id="1-4-依赖倒转原则"><a href="#1-4-依赖倒转原则" class="headerlink" title="1.4 依赖倒转原则"></a>1.4 依赖倒转原则</h2><blockquote><p>依赖倒转原则即抽象不应该依赖细节，细节应该依赖于抽象。高层模块不应该依赖底层模块，两个都应该依赖抽象。其实就是要针对抽象进行编程，不要对实现进行编程，减少耦合。</p></blockquote><h2 id="1-5-接口隔离原则"><a href="#1-5-接口隔离原则" class="headerlink" title="1.5 接口隔离原则"></a>1.5 接口隔离原则</h2><blockquote><p>每个接口中不存在子类用不到却必须实现的方法，如果不然，就要将接口拆分。使用多个隔离的接口，比使用单个接口要好。</p></blockquote><h2 id="1-6-迪米特法则（最少知道原则）"><a href="#1-6-迪米特法则（最少知道原则）" class="headerlink" title="1.6 迪米特法则（最少知道原则）"></a>1.6 迪米特法则（最少知道原则）</h2><blockquote><p>一个类对自己依赖的类知道的越少越好。无论是被依赖的类多么复杂，都应该将逻辑封装在方法的内部，通过public方法提供给外部。这样当被依赖的类变化时，才能最少的影响该类。<br>最少知道原则的另一个表达方式是：只与直接的朋友通信。类之间只要有耦合关系，就叫朋友关系。耦合分为依赖、关联、聚合、组合等。我们称出现为成员变量、方法参数、方法返回值中的类为直接朋友。局部变量、临时变量则不是直接的朋友。我们要求陌生的类不要作为局部变量出现在类中。</p></blockquote><h2 id="2-其他设计原则"><a href="#2-其他设计原则" class="headerlink" title="2 其他设计原则"></a>2 其他设计原则</h2><ul><li>找出应用中可能需要变化之处，把他们独立出来，不要和那些不需要变化的代码混在一起。</li><li>针对接口编程，而不是针对实现编程。</li><li>为了交互对象之间的松耦合设计而努力。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;1-设计模式六大原则&quot;&gt;&lt;a href=&quot;#1-设计模式六大原则&quot; class=&quot;headerlink&quot; title=&quot;1 设计模式六大原则&quot;&gt;&lt;/a&gt;1 设计模式六大原则&lt;/h2&gt;&lt;p&gt;面向对象设计主要是为了软件的可维护性、可拓展、可复用和灵活性好。在面对新的需
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/categories/Java/"/>
+    
+      <category term="设计模式" scheme="http://karzert.github.io/categories/Java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+    
+      <category term="Java" scheme="http://karzert.github.io/tags/Java/"/>
+    
+      <category term="设计模式" scheme="http://karzert.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+</feed>
