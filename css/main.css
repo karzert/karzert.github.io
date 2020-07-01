@@ -1831,7 +1831,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffbfff;
+  background: #5563bd;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3000,7 +3000,7 @@ pre .javascript .function {
   }
 }
 body {
-  background: url("https://source.unsplash.com/random/1920x1080");
+  background: url("https://api.dujin.org/bing/1920.php");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
