@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/java2.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/java2.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java,设计模式," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Karzert's Blog" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="代理模式的应用场景在生活中，我们经常见到这样的场景，如：房屋中介、售票黄牛、婚介、经纪人、快递、事务代理、非侵入式日志监听等，这些都是代理模式的实际体现。代理模式的定义也非常简单，是指为其他对象提供一种代理，以控制对这个对象的访问。代理对象在客户端和目标对象之间起到中介作用，代理模式属于结构型模式。使用代理模式主要有两个目的：  保护目标对象 增强目标对象  静态代理举个例子：人到了适婚年龄，父母">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代理模式">
+<meta property="og:url" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Karzert&#39;s Blog">
+<meta property="og:description" content="代理模式的应用场景在生活中，我们经常见到这样的场景，如：房屋中介、售票黄牛、婚介、经纪人、快递、事务代理、非侵入式日志监听等，这些都是代理模式的实际体现。代理模式的定义也非常简单，是指为其他对象提供一种代理，以控制对这个对象的访问。代理对象在客户端和目标对象之间起到中介作用，代理模式属于结构型模式。使用代理模式主要有两个目的：  保护目标对象 增强目标对象  静态代理举个例子：人到了适婚年龄，父母">
+<meta property="og:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/result1.png">
+<meta property="og:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgmeipo.png">
+<meta property="og:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgcustomer.png">
+<meta property="og:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgtest.png">
+<meta property="og:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/object.png">
+<meta property="article:published_time" content="2020-06-30T11:50:05.000Z">
+<meta property="article:modified_time" content="2020-06-30T12:45:06.317Z">
+<meta property="article:author" content="Karzert">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/result1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'RLJX1F1LOO',
+      apiKey: '84eb8b413cebbc9f37a6833f8ea4e785',
+      indexName: 'NullPointer',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"请输入关键字","hits_empty":"找不到关于“ ${query} ”的文章","hits_stats":"共找到 ${hits} 篇文章，花了 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://karzert.github.io/2020/06/30/代理模式/"/>
+
+
+
+
+
+  <title>代理模式 | Karzert's Blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Karzert's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Karzert">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Karzert's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">代理模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-30T19:50:05+08:00">
+                2020-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="代理模式的应用场景"><a href="#代理模式的应用场景" class="headerlink" title="代理模式的应用场景"></a>代理模式的应用场景</h3><p>在生活中，我们经常见到这样的场景，如：房屋中介、售票黄牛、婚介、经纪人、快递、事务代理、非侵入式日志监听等，这些都是代理模式的实际体现。代理模式的定义也非常简单，是指为其他对象提供一种代理，以控制对这个对象的访问。代理对象在客户端和目标对象之间起到中介作用，代理模式属于结构型模式。使用代理模式主要有两个目的：</p>
+<ol>
+<li>保护目标对象</li>
+<li>增强目标对象</li>
+</ol>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>举个例子：人到了适婚年龄，父母总是迫不及待希望早点抱孙子。而现在社会的人在各种压力之下，都选择晚婚晚育。于是着急的父母就开始到处为自己的子女相亲，比子女自己还着急。这个相亲的过程，就是一种我们人人都有份的代理。代码实现：<br>顶层接口Person：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>儿子要找对象，实现Son类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">implements</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"儿子要求：肤白貌美大长腿"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>父亲要帮儿子相亲，实现Father类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Son son;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Father</span><span class="params">(Son son)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.son = son;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"父母物色对象"</span>);</span><br><span class="line">		<span class="keyword">this</span>.son.findLove();</span><br><span class="line">		System.out.println(<span class="string">"双方同意交往，确认关系"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	Father father = <span class="keyword">new</span> Father(<span class="keyword">new</span> Son());</span><br><span class="line">	father.findLove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/result1.png" alt><br>可以看到Fathre类作为代理对象，可以增加Son类的方法的功能。</p>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>动态代理和静态对比基本思路是一致的，只不过动态代理功能更加强大，随着业务的扩展适应性更强，如果还以找对象为例，使用动态代理相当于是能够适应复杂的业务场景。不仅仅只是父亲给儿子找对象，如果找对象这项业务发展成了一个产业，进而出现了媒婆、婚介所等这样的形式。那么，此时用静态代理成本就更大了，需要一个更加通用的解决方案，满足任何单身人士找对象的要求。</p>
+<h4 id="JDK实现方法"><a href="#JDK实现方法" class="headerlink" title="JDK实现方法"></a>JDK实现方法</h4><p>创建媒婆JDKMeipo类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDKMeipo</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object target;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">(Object target)</span> throw Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.target = target;</span><br><span class="line">		Class&lt;?&gt; clazz = target<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">		<span class="keyword">return</span> Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterface(), <span class="keyword">this</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> throw Throwable </span>&#123;</span><br><span class="line">			before();</span><br><span class="line">			Object obj = method.invoke(<span class="keyword">this</span>.target, args);</span><br><span class="line">			after();</span><br><span class="line">			<span class="keyword">return</span> obj;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"我是媒婆：我要给你找对象，现在已经拿到你的需求"</span>);</span><br><span class="line">			System.out.println(<span class="string">"开始物色"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"双方同意交往，确认关系"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建单身客户Customer类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> <span class="keyword">implements</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"高富帅"</span>);</span><br><span class="line">		System.out.println(<span class="string">"身高180cm"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		Person obj = (Person) <span class="keyword">new</span> JDKMeipo().getInstance(<span class="keyword">new</span> Customer());</span><br><span class="line">		obj.findLove();</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="CGLib调用API"><a href="#CGLib调用API" class="headerlink" title="CGLib调用API"></a>CGLib调用API</h4><p>CGLib代理的使用，还是以媒婆为例，创建CglibMeipo类：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgmeipo.png" alt><br>创建单身客户Customer类：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgcustomer.png" alt><br>CGLib代理的目标不需要实现任何接口，它是通过动态继承目标对象实现的动态代理，测试代码：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgtest.png" alt></p>
+<h3 id="CGLib和JDK动态代理对比"><a href="#CGLib和JDK动态代理对比" class="headerlink" title="CGLib和JDK动态代理对比"></a>CGLib和JDK动态代理对比</h3><ol>
+<li>JDK动态代理是实现了被代理对象的接口，CGLib是继承了被代理的对象。</li>
+<li>JDK和CGLib都是在运行期生成字节码，JDK是直接写Class字节码， CGLib使用ASM框架Class字节码，Cglib代理实现更复杂，生成代理类比JDK效率低。</li>
+<li>JDK调用代理方法，是通过反射机制调用，CGLib是通过FastClass机制直接调用方法，CGLib执行效率更高。</li>
+</ol>
+<h3 id="代理模式与Spring"><a href="#代理模式与Spring" class="headerlink" title="代理模式与Spring"></a>代理模式与Spring</h3><h4 id="代理模式在Spring源码中的应用"><a href="#代理模式在Spring源码中的应用" class="headerlink" title="代理模式在Spring源码中的应用"></a>代理模式在Spring源码中的应用</h4><p>先看ProxyFatoryBean核心的方法就是getObject()方法，看一下源码：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/object.png" alt><br>在getObject()方法中，主要调用getSingletonInstance()和newPrototypeInstance();在Spring的配置中，如果不做任何设置，那么Spring代理生成的Bean都是单例对象。如果修改scope则每次创建一个新的原型对象。</p>
+<h4 id="Spring中的代理选择原则"><a href="#Spring中的代理选择原则" class="headerlink" title="Spring中的代理选择原则"></a>Spring中的代理选择原则</h4><ol>
+<li>当Bean有实现接口时，Spring就会用JDK的动态代理。</li>
+<li>当Bean没有实现接口时，Spring选择CGLib。</li>
+<li>Spring可以通过配置强制使用CGLib，只需要在Spring的配置文件中加入如下代码：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;aop:aspectj-autoproxy proxy-target-<span class="class"><span class="keyword">class</span></span>=<span class="string">"true"</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="静态代理和动态代理的本质区别"><a href="#静态代理和动态代理的本质区别" class="headerlink" title="静态代理和动态代理的本质区别"></a>静态代理和动态代理的本质区别</h3><ol>
+<li>静态代理只能通过手动完成代理操作，如果被代理类增加新的方法，代理类需要同步新增，违背开闭原则。</li>
+<li>动态代理采用在运行时动态生成代码的方式，取消了对被代理类的扩展限制，遵循开闭原则。</li>
+<li>若动态代理要对目标类的增强逻辑扩展，结果策略模式，只需要新增策略类便可完成，无需修改代理类的代码。</li>
+</ol>
+<h3 id="代理模式的优缺点"><a href="#代理模式的优缺点" class="headerlink" title="代理模式的优缺点"></a>代理模式的优缺点</h3><p>代理模式具有以下几个优点：</p>
+<ol>
+<li>代理模式能将代理对象与真实被调用的目标对象分离。</li>
+<li>一定程度上降低了系统的耦合度，扩展性好。</li>
+<li>可以起到保护目标对象的作用。</li>
+<li>可以对目标对象的功能增强。</li>
+</ol>
+<p>代理模式具有以下缺点：</p>
+<ol>
+<li>代理模式会造成系统设计中类的数量增加。</li>
+<li>在客户端和目标对象增加一个代理对象，会造成请求处理速度变慢。</li>
+<li>增加了系统的复杂度。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Karzert
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" title="代理模式">http://karzert.github.io/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" rel="next" title="原型模式">
+                <i class="fa fa-chevron-left"></i> 原型模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      },
+      "slide": {
+        "bdImg": "5",
+        "bdPos": "left",
+        "bdTop": "100"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Karzert" />
+            
+              <p class="site-author-name" itemprop="name">Karzert</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:751769401@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/3190763714/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式的应用场景"><span class="nav-number">1.</span> <span class="nav-text">代理模式的应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理"><span class="nav-number">2.</span> <span class="nav-text">静态代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态代理"><span class="nav-number">3.</span> <span class="nav-text">动态代理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JDK实现方法"><span class="nav-number">3.1.</span> <span class="nav-text">JDK实现方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CGLib调用API"><span class="nav-number">3.2.</span> <span class="nav-text">CGLib调用API</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CGLib和JDK动态代理对比"><span class="nav-number">4.</span> <span class="nav-text">CGLib和JDK动态代理对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式与Spring"><span class="nav-number">5.</span> <span class="nav-text">代理模式与Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式在Spring源码中的应用"><span class="nav-number">5.1.</span> <span class="nav-text">代理模式在Spring源码中的应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring中的代理选择原则"><span class="nav-number">5.2.</span> <span class="nav-text">Spring中的代理选择原则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态代理和动态代理的本质区别"><span class="nav-number">6.</span> <span class="nav-text">静态代理和动态代理的本质区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式的优缺点"><span class="nav-number">7.</span> <span class="nav-text">代理模式的优缺点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Karzert</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'x4JXKWMysPVLd0IKXNzIh0px-gzGzoHsz',
+        appKey: 'GsqYfxNiNfma8MSyCL5GjQLn',
+        placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.3"></script>
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
