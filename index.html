@@ -1815,7 +1815,7 @@ new产生的一个对象需要非常繁琐的过程（数据准备、访问权�
 
                   // select top N slices in content
 
-                  var upperBound = parseInt('');
+                  var upperBound = parseInt('1');
                   if (upperBound >= 0) {
                     slicesOfContent = slicesOfContent.slice(0, upperBound);
                   }
@@ -1882,7 +1882,7 @@ new产生的一个对象需要非常繁琐的过程（数据准备、访问权�
             }
           }
 
-          if ('auto' === '') {
+          if ('auto' === 'auto') {
             input.addEventListener('input', inputEventFunction);
           } else {
             $('.search-icon').click(inputEventFunction);
