@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>代理模式</title>
+    <url>/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="代理模式的应用场景"><a href="#代理模式的应用场景" class="headerlink" title="代理模式的应用场景"></a>代理模式的应用场景</h3><p>在生活中，我们经常见到这样的场景，如：房屋中介、售票黄牛、婚介、经纪人、快递、事务代理、非侵入式日志监听等，这些都是代理模式的实际体现。代理模式的定义也非常简单，是指为其他对象提供一种代理，以控制对这个对象的访问。代理对象在客户端和目标对象之间起到中介作用，代理模式属于结构型模式。使用代理模式主要有两个目的：</p>
+<ol>
+<li>保护目标对象</li>
+<li>增强目标对象</li>
+</ol>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>举个例子：人到了适婚年龄，父母总是迫不及待希望早点抱孙子。而现在社会的人在各种压力之下，都选择晚婚晚育。于是着急的父母就开始到处为自己的子女相亲，比子女自己还着急。这个相亲的过程，就是一种我们人人都有份的代理。代码实现：<br>顶层接口Person：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>儿子要找对象，实现Son类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">implements</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"儿子要求：肤白貌美大长腿"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>父亲要帮儿子相亲，实现Father类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Son son;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Father</span><span class="params">(Son son)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.son = son;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"父母物色对象"</span>);</span><br><span class="line">		<span class="keyword">this</span>.son.findLove();</span><br><span class="line">		System.out.println(<span class="string">"双方同意交往，确认关系"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	Father father = <span class="keyword">new</span> Father(<span class="keyword">new</span> Son());</span><br><span class="line">	father.findLove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/result1.png" alt><br>可以看到Fathre类作为代理对象，可以增加Son类的方法的功能。</p>
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p>动态代理和静态对比基本思路是一致的，只不过动态代理功能更加强大，随着业务的扩展适应性更强，如果还以找对象为例，使用动态代理相当于是能够适应复杂的业务场景。不仅仅只是父亲给儿子找对象，如果找对象这项业务发展成了一个产业，进而出现了媒婆、婚介所等这样的形式。那么，此时用静态代理成本就更大了，需要一个更加通用的解决方案，满足任何单身人士找对象的要求。</p>
+<h4 id="JDK实现方法"><a href="#JDK实现方法" class="headerlink" title="JDK实现方法"></a>JDK实现方法</h4><p>创建媒婆JDKMeipo类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDKMeipo</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Object target;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getInstance</span><span class="params">(Object target)</span> throw Exception</span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.target = target;</span><br><span class="line">		Class&lt;?&gt; clazz = target<span class="class">.<span class="keyword">class</span></span>;</span><br><span class="line">		<span class="keyword">return</span> Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterface(), <span class="keyword">this</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> throw Throwable </span>&#123;</span><br><span class="line">			before();</span><br><span class="line">			Object obj = method.invoke(<span class="keyword">this</span>.target, args);</span><br><span class="line">			after();</span><br><span class="line">			<span class="keyword">return</span> obj;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"我是媒婆：我要给你找对象，现在已经拿到你的需求"</span>);</span><br><span class="line">			System.out.println(<span class="string">"开始物色"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</span><br><span class="line">			System.out.println(<span class="string">"双方同意交往，确认关系"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建单身客户Customer类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Customer</span> <span class="keyword">implements</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findLove</span><span class="params">()</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"高富帅"</span>);</span><br><span class="line">		System.out.println(<span class="string">"身高180cm"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		Person obj = (Person) <span class="keyword">new</span> JDKMeipo().getInstance(<span class="keyword">new</span> Customer());</span><br><span class="line">		obj.findLove();</span><br><span class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">		e.printStackTrace();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="CGLib调用API"><a href="#CGLib调用API" class="headerlink" title="CGLib调用API"></a>CGLib调用API</h4><p>CGLib代理的使用，还是以媒婆为例，创建CglibMeipo类：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgmeipo.png" alt><br>创建单身客户Customer类：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgcustomer.png" alt><br>CGLib代理的目标不需要实现任何接口，它是通过动态继承目标对象实现的动态代理，测试代码：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/cgtest.png" alt></p>
+<h3 id="CGLib和JDK动态代理对比"><a href="#CGLib和JDK动态代理对比" class="headerlink" title="CGLib和JDK动态代理对比"></a>CGLib和JDK动态代理对比</h3><ol>
+<li>JDK动态代理是实现了被代理对象的接口，CGLib是继承了被代理的对象。</li>
+<li>JDK和CGLib都是在运行期生成字节码，JDK是直接写Class字节码， CGLib使用ASM框架Class字节码，Cglib代理实现更复杂，生成代理类比JDK效率低。</li>
+<li>JDK调用代理方法，是通过反射机制调用，CGLib是通过FastClass机制直接调用方法，CGLib执行效率更高。</li>
+</ol>
+<h3 id="代理模式与Spring"><a href="#代理模式与Spring" class="headerlink" title="代理模式与Spring"></a>代理模式与Spring</h3><h4 id="代理模式在Spring源码中的应用"><a href="#代理模式在Spring源码中的应用" class="headerlink" title="代理模式在Spring源码中的应用"></a>代理模式在Spring源码中的应用</h4><p>先看ProxyFatoryBean核心的方法就是getObject()方法，看一下源码：<br><img src="/2020/06/30/%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/object.png" alt><br>在getObject()方法中，主要调用getSingletonInstance()和newPrototypeInstance();在Spring的配置中，如果不做任何设置，那么Spring代理生成的Bean都是单例对象。如果修改scope则每次创建一个新的原型对象。</p>
+<h4 id="Spring中的代理选择原则"><a href="#Spring中的代理选择原则" class="headerlink" title="Spring中的代理选择原则"></a>Spring中的代理选择原则</h4><ol>
+<li>当Bean有实现接口时，Spring就会用JDK的动态代理。</li>
+<li>当Bean没有实现接口时，Spring选择CGLib。</li>
+<li>Spring可以通过配置强制使用CGLib，只需要在Spring的配置文件中加入如下代码：<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;aop:aspectj-autoproxy proxy-target-<span class="class"><span class="keyword">class</span></span>=<span class="string">"true"</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="静态代理和动态代理的本质区别"><a href="#静态代理和动态代理的本质区别" class="headerlink" title="静态代理和动态代理的本质区别"></a>静态代理和动态代理的本质区别</h3><ol>
+<li>静态代理只能通过手动完成代理操作，如果被代理类增加新的方法，代理类需要同步新增，违背开闭原则。</li>
+<li>动态代理采用在运行时动态生成代码的方式，取消了对被代理类的扩展限制，遵循开闭原则。</li>
+<li>若动态代理要对目标类的增强逻辑扩展，结果策略模式，只需要新增策略类便可完成，无需修改代理类的代码。</li>
+</ol>
+<h3 id="代理模式的优缺点"><a href="#代理模式的优缺点" class="headerlink" title="代理模式的优缺点"></a>代理模式的优缺点</h3><p>代理模式具有以下几个优点：</p>
+<ol>
+<li>代理模式能将代理对象与真实被调用的目标对象分离。</li>
+<li>一定程度上降低了系统的耦合度，扩展性好。</li>
+<li>可以起到保护目标对象的作用。</li>
+<li>可以对目标对象的功能增强。</li>
+</ol>
+<p>代理模式具有以下缺点：</p>
+<ol>
+<li>代理模式会造成系统设计中类的数量增加。</li>
+<li>在客户端和目标对象增加一个代理对象，会造成请求处理速度变慢。</li>
+<li>增加了系统的复杂度。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>何为面向对象编程</title>
+    <url>/2018/09/11/%E4%BD%95%E4%B8%BA%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="1-面向对象编程概述"><a href="#1-面向对象编程概述" class="headerlink" title="1 面向对象编程概述"></a>1 面向对象编程概述</h2><p>面向对象程序设计（Object-oriented Programming）是种具有对象概念的程序编程规范，同时也是一种程序开发的方法。它可能包含数据、属性、代码与方法。对象则指的是类的实例。它将对象作为程序的基本单元，将程序和数据封装其中，以提高软件的重用性，灵活性和扩展性，对象里的程序可以访问及经常修改对象相关联的数据。在面向对象程序编程里，计算机程序会被设计成彼此相关的对象。</p>
+<p>面向对象程序设计可以看做一种在程序中包含各种独立而又互相调用的对象的思想，这与传统的思想刚好相反：传统的程序设计主张将程序看做一系列函数的集合，或者直接就是一系列对电脑下达的指令。面向对象程序设计中的每一个对象都应该能够接受数据、处理数据并将数据传达给其他对象，因此他们都可以被看做一个小型的“机器”，即对象。目前已经被证实的是，面向对象程序设计推广了程序的灵活性和可维护性，并且在大型项目设计中广为应用。此外。支持者生成面向对象程序设计要比以往的做法更加便于学习，因为它能够让人们更简单的设计并维护程序，使得程序更加便于分析、设计、理解。反对者在某些领域对此予以否认。</p>
+<p>当我们提到面向对象的时候，它不仅指一种程序设计方法，它更多意义上是一种程序开发方式，在这一方面，我们必须了解更多关于面向对象系统分析和面向对象设计方面的知识。</p>
+<p>支持部分或绝大部分面向对象特性（类和实例，封装、继承、多态）的语言即可成为基于对象的或面向对象的语言。如Java，C#等。</p>
+<h2 id="2-面向对象的三大特性"><a href="#2-面向对象的三大特性" class="headerlink" title="2 面向对象的三大特性"></a>2 面向对象的三大特性</h2><h4 id="2-1-封装"><a href="#2-1-封装" class="headerlink" title="2.1 封装"></a>2.1 封装</h4><blockquote>
+<p>所谓封装，也就是把客观事物封装成抽象的类，并且类可以把自己的数据和方法只让可信的类或者对象操作，对不可信的进行信息隐藏。封装是面向对象的特征之一，是对象和类概念的主要特性。 简单的说，一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。在一个对象内部，某些代码或某些数据可以是私有的，不能被外界访问。通过这种方式，对象对内部数据提供了不同级别的保护，以防止程序中无关的部分意外的改变或错误的使用了对象的私有部分。</p>
+</blockquote>
+<h4 id="2-2-继承"><a href="#2-2-继承" class="headerlink" title="2.2 继承"></a>2.2 继承</h4><blockquote>
+<p>所谓继承是指可以让某个类型的对象获得另一个类型的对象的属性的方法。它支持按级分类的概念。继承是指这样一种能力：它可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展。 通过继承创建的新类称为“子类”或“派生类”，被继承的类称为“基类”、“父类”或“超类”。继承的过程，就是从一般到特殊的过程。要实现继承，可以通过“继承”（Inheritance）和“组合”（Composition）来实现。继承概念的实现方式有二类：实现继承与接口继承。实现继承是指直接使用基类的属性和方法而无需额外编码的能力；接口继承是指仅使用属性和方法的名称、但是子类必须提供实现的能力。</p>
+</blockquote>
+<h3 id="2-3-多态"><a href="#2-3-多态" class="headerlink" title="2.3 多态"></a>2.3 多态</h3><blockquote>
+<p>所谓多态就是指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着，虽然针对不同对象的具体操作不同，但通过一个公共的类，它们（那些操作）可以通过相同的方式予以调用。</p>
+</blockquote>
+<h2 id="3-面向对象编程的优点"><a href="#3-面向对象编程的优点" class="headerlink" title="3 面向对象编程的优点"></a>3 面向对象编程的优点</h2><h4 id="3-1-易维护"><a href="#3-1-易维护" class="headerlink" title="3.1 易维护"></a>3.1 易维护</h4><blockquote>
+<p>采用面向对象思想设计的结构，可读性高，由于继承的存在，即使改变需求，那么维护也只是在局部模块，所以维护起来是非常方便和较低成本的。</p>
+</blockquote>
+<h4 id="3-2-易扩展"><a href="#3-2-易扩展" class="headerlink" title="3.2 易扩展"></a>3.2 易扩展</h4><blockquote>
+<p>通过继承，我们可以大幅减少多余的代码，并扩展现有代码的用途；<br>我们可以在标准的模块上（这里所谓的”标准”指程序员之间彼此达成的协议）构建我们的程序，而不必一切从头开始。这可以减少软件开发时间并提高生产效率。</p>
+</blockquote>
+<h4 id="3-3-模块化"><a href="#3-3-模块化" class="headerlink" title="3.3 模块化"></a>3.3 模块化</h4><blockquote>
+<p>封装可以定义对象的属性和方法的访问级别，通过不同的访问修饰符对外暴露安全的接口，防止内部数据在不安全的情况下被修改。这样可以使程序具备更高的模块化程度，方便后期的维护和修改。<br>同时，面向对象语言允许一个对象的多个实例同时存在，而且彼此之间不会相互干扰。</p>
+</blockquote>
+<h4 id="3-4-方便建模"><a href="#3-4-方便建模" class="headerlink" title="3.4 方便建模"></a>3.4 方便建模</h4><blockquote>
+<p>虽然面向对象语言中的对象与现实生活中的对象并不是同个概念，但很多时候，往往可以使用现实生活中对象的概念抽象后稍作修改来进行建模，这大大方便了建模的过程。（但直接使用现实中的对象来建模有时会适得其反）。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>单例模式</title>
+    <url>/2020/06/30/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="单例模式的应用场景"><a href="#单例模式的应用场景" class="headerlink" title="单例模式的应用场景"></a>单例模式的应用场景</h3><p>单例模式是指确保一个类在任何情况下都绝对只有一个实例，并提供一个全局访问点。单例模式属于创建性模式。</p>
+<h3 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h3><p>饿汉式单例是在类加载的时候就立即初始化，并且创建单例对象。绝对线程安全，在线程还没出现以前就是实例化了，不可能存在访问安全问题。<br>优点：没有加任何锁，执行效率高。<br>缺点：类加载的时候就初始化，不管用与不用都占着空间，浪费内存。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HungrySingleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HungrySinglton hungrySingleton = <span class="keyword">new</span> HungrySingleton();</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">HungrySingleton</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HungrySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> hungrySingleton;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另一种利用静态代码块的写法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HungryStaticSingleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> HungryStaticSingleton hungryStaticSingleton;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span> &#123;</span><br><span class="line">		hungryStaticSingleton = <span class="keyword">new</span> HungryStaticSingleton();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">HungryStaticSingleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HungryStaticSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> hungryStaticSingleton;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="懒汉式双重校验单例"><a href="#懒汉式双重校验单例" class="headerlink" title="懒汉式双重校验单例"></a>懒汉式双重校验单例</h3><p>懒汉式单例的特点是：被外部类调用的时候内部类才会加载。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyDoubleCheckSingleton</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazyDoubleCheckSingleton lazy = <span class="keyword">null</span>;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">LazyDoubleCheckSingleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazyDoubleCheckSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(<span class="keyword">null</span> == lazy) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span>(LazyDoubleCheckSingleton<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(<span class="keyword">null</span> == lazy) &#123;</span><br><span class="line">					lazy = <span class="keyword">new</span> LazyDoubleCheckSingleton();</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="静态内部类单例"><a href="#静态内部类单例" class="headerlink" title="静态内部类单例"></a>静态内部类单例</h3><p>特点：这种形式兼顾饿汉式的内存浪费，也兼顾synchronzied性能问题。内部类一定是要在方法调用之前初始化，巧妙的避免了线程安全问题。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyInnerClassSingleton</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">LazyInnerClassSingleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> LazyInnerClassSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> LazyHolder.LAZY;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyHolder</span> </span>&#123;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> LazyInnerClassSingleton LAZY = <span class="keyword">new</span> LazyInnerClassSingleton();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="反射破坏单例"><a href="#反射破坏单例" class="headerlink" title="反射破坏单例"></a>反射破坏单例</h3><p>虽然上述方式将单例类的构造方式私有了，导致我们在代码中不能通过new创建对象，但是依然可以通过反射创建对象，所以只需要在构造方法中做一些限制，一旦出现多次重复创建，则直接抛出异常便可以解决该问题。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyInnerClassSingleton</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">LazyInnerClassSingleton</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(LazyHolder.LAZY != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"不允许创建多个实例"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> LazyInnerClassSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> LazyHolder.LAZY;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LazyHolder</span> </span>&#123;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> LazyInnerClassSingleton LAZY = <span class="keyword">new</span> LazyInnerClassSingleton();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="序列化破坏单例"><a href="#序列化破坏单例" class="headerlink" title="序列化破坏单例"></a>序列化破坏单例</h3><p>当我们将一个单例对象创建好，有时候需要将对象序列化然后写入到磁盘，下次使用时再从磁盘中读取到对象，反序列化转化为内存对象。反序列化后的对象会重新分配内存，即重新创建。那如果序列化的目标的对象为单例对象，就违背了单例模式的初衷，相当于破坏了单例。<br>解决方式：只需要增加readResolve()方法即可。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SeriableSingleton</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> SeriableSingleton INSTANCE = <span class="keyword">new</span> SeriableSingleton();</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SeriableSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> INSTANCE;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> Object <span class="title">readResolve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> INSTANCE;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="注册式单例"><a href="#注册式单例" class="headerlink" title="注册式单例"></a>注册式单例</h3><p>注册式单例又称为登记式单例，就是将每一个实例都登记到某一个地方，，使用唯一的标识获取实例。注册式单例有两种写法：一种为容器缓存，一种为枚举登记。</p>
+<p>枚举式单例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title">EnumSingleton</span><span class="params">()</span></span>&#123;</span><br><span class="line">	INSTANCE;</span><br><span class="line">	<span class="keyword">private</span> Object data;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">getData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> data;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setData</span><span class="params">(Object data)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.data = data;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EnumSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> INSTANCE;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>原型模式</title>
+    <url>/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="原型模式的应用场景"><a href="#原型模式的应用场景" class="headerlink" title="原型模式的应用场景"></a>原型模式的应用场景</h3><p>原型模式是指原型实例制定创建对象的种类，并且通过拷贝这些原型创建新的对象。<br>原型模式主要适用于以下场景：</p>
+<ol>
+<li>类初始化消耗资源较多。</li>
+<li>new产生的一个对象需要非常繁琐的过程（数据准备、访问权限等）</li>
+<li>构造函数比较复杂。</li>
+<li>循环体中生产大量对象。</li>
+</ol>
+<h3 id="简单克隆"><a href="#简单克隆" class="headerlink" title="简单克隆"></a>简单克隆</h3><p>一个标准的原型模式代码，应该是这样设计的。先创建原型Prototype接口：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Prototype</span></span>&#123;</span><br><span class="line">	<span class="function">Prototype <span class="title">clone</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建具体需要克隆的对象ConcretePrototype:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcretePrototypeA</span> <span class="keyword">implements</span> <span class="title">Prototype</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	<span class="keyword">private</span> List hobbies;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.name = name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> List <span class="title">getHobbies</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> hobbies;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHobbies</span><span class="params">(List hobbies)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.hobbies = hobbies;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ConcretePrototypeA <span class="title">clone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		ConcretePrototypeA prototype = <span class="keyword">new</span> ConcretePrototype();</span><br><span class="line">		prototype.setAge(<span class="keyword">this</span>.age);</span><br><span class="line">		prototype.setName(<span class="keyword">this</span>.name);</span><br><span class="line">		prototype.setHobbies(<span class="keyword">this</span>.hobbies);</span><br><span class="line">		<span class="keyword">return</span> prototype;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建Client对象：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Prototype prototype;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Client</span><span class="params">(Prototype prototype)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.prototype = prototype;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Prototype <span class="title">startClone</span><span class="params">(Prototype concretePrototype)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> (Prototype) concretePrototype.clone();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrototypeTest</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 创建一个具体的需要克隆的对象</span></span><br><span class="line">		ConcretePrototypeA prototype = <span class="keyword">new</span> ConcretePrototype();</span><br><span class="line">		prototype.setAge(<span class="number">18</span>);</span><br><span class="line">		prototype.setName(<span class="string">"prototype"</span>);</span><br><span class="line">		List hobbies = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">		prototype.setHobbies(hobbies);</span><br><span class="line">		System.out.println(prototype);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// 创建Client对象，准备克隆</span></span><br><span class="line">		Client client = <span class="keyword">new</span> Client(prototype);</span><br><span class="line">		ConcretePrototypeA concretePrototypeClone = (ConcretePrototypeA) clinet.startClone(prototype);</span><br><span class="line">		System.out.println(concretePrototypeClone);</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"克隆对象中的引用类型地址值："</span> + concretePrototypeClone.getHobbies());</span><br><span class="line">		System.out.println(<span class="string">"原对象中的引用类型地址值："</span> + prototype.getHobbies());</span><br><span class="line">		System.out.println(<span class="string">"对象地址比较："</span> + (concretePrototypeClone.getHobbies() == prototype.getHobbies()));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/TestResult.png" alt></p>
+<p>从测试结果看出hobbies的引用地址是相同的，意味着复制的不是值，而是引用的地址。这样的话，如果我们修改任意一个对象中的属性值，prototype和concretePrototypeClone的hobbies值都会改变。这就是我们常说的浅克隆。只是完整复制了值类型数据，没有复制引用对象。换言之，所有的引用对象仍然指向原来的对象。</p>
+<h3 id="深度克隆"><a href="#深度克隆" class="headerlink" title="深度克隆"></a>深度克隆</h3><p>换一个场景，大家都知道齐天大圣。首先它是一只猴子，有七十二般变化，拔一根猴毛就可以吹出千万个猴子，手里还拿着金箍棒，金箍棒可以变大变小。这就是我们耳熟能详的原型模式的经典体现。<br>创建原型猴子Monkey类：<br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/monkey.png" alt><br>创建引用对象金箍棒Jingubang类：<br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/jingubang.png" alt><br>创建具体的对象齐天大圣QiTianDaSheng类：<br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/qtds1.png" alt><br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/qtds2.png" alt><br>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DeepCloneTest</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		QiTianDaSheng qi = <span class="keyword">new</span> QiTianDaSheng();</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			QiTianDaSheng clone = (QiTianDaSheng) qi.clone();</span><br><span class="line">			System.out.println(<span class="string">"深克隆："</span> + (qi.jinGuBang == clone.jinGuBang));</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		QiTianDaSheng q = <span class="keyword">new</span> QiTianDaSheng();</span><br><span class="line">		QiTianDaSheng n = q.shallowClone(q);</span><br><span class="line">		System.out.println(<span class="string">"浅克隆："</span> + (q.jinGuBang == n.jinGuBang));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br><img src="/2020/06/30/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/result.png" alt></p>
+<h3 id="克隆破坏单例"><a href="#克隆破坏单例" class="headerlink" title="克隆破坏单例"></a>克隆破坏单例</h3><p>如果我们克隆的目标对象是单例对象，那意味着，深克隆会破坏单例。如果要防止深克隆破坏单例那么禁止深克隆即可。要么单例类不实现Cloneable接口；要么重写clone方法，在clone()方法中返回单例对象即可。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span> throw CloneNotSupportException </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> INSTANCE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Cloneable源码分析"><a href="#Cloneable源码分析" class="headerlink" title="Cloneable源码分析"></a>Cloneable源码分析</h3><p>常用的ArrayList就实现了Cloneable接口，看代码clone()方法的实现：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">try</span>&#123;</span><br><span class="line">		ArrayList&lt;?&gt; v = (ArrayList&lt;?&gt;) <span class="keyword">super</span>.clone();</span><br><span class="line">		v.elementData = Arrays.copyOf(elementData, size);</span><br><span class="line">		v.modCount = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">return</span> v;</span><br><span class="line">	&#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> InternalError(e);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>统一建模语言 UML</title>
+    <url>/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/</url>
+    <content><![CDATA[<h2 id="1-什么是统一建模语言"><a href="#1-什么是统一建模语言" class="headerlink" title="1 什么是统一建模语言"></a>1 什么是统一建模语言</h2><blockquote>
+<p>统一建模语言（UML是 Unified Modeling Language的缩写）是用来对软件密集系统进行可视化建模的一种语言。UML为面向对象开发系统的产品进行说明、可视化、和编制文档的一种标准语言。</p>
+<p>统一建模语言 (UML)是非专利的第三代建模和规约语言。 UML是在开发阶段，说明，可视化，构建和书写一个面向对象软件密集系统的制品的开放方法。UML展现了一系列最佳工程实践，这些最佳实践在对大规模，复杂系统进行建模方面,特别是在软件架构层次已经被验证有效。</p>
+<p>UML可以贯穿软件开发周期中的每一个阶段。被OMG采纳作为业界的标准。</p>
+<p>UML最适于数据建模，业务建模，对象建模，组件建模。</p>
+<p>UML作为一种模型语言，它使开发人员专注于建立产品的模型和结构，而不是选用什么程序语言和算法实现。当模型建立之后，模型可以被UML工具转化成指定的程序语言代码。</p>
+</blockquote>
+<h2 id="2-为什么要建模"><a href="#2-为什么要建模" class="headerlink" title="2 为什么要建模"></a>2 为什么要建模</h2><blockquote>
+<p>建模是了为了能够更好的理解正在开发的系统</p>
+<p>通过建模达到下面的目的</p>
+<ol>
+<li>模型有助于按照实际情况或按照所需的样式对系统进行可视化</li>
+<li>模型能够规约系统的结构或行为</li>
+<li>模型给出了构造系统的模板</li>
+<li>模型对做出的决策进行文档化</li>
+</ol>
+</blockquote>
+<h2 id="3-细说UML"><a href="#3-细说UML" class="headerlink" title="3 细说UML"></a>3 细说UML</h2><p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml1.png" alt></p>
+<h4 id="3-1-类与抽象类"><a href="#3-1-类与抽象类" class="headerlink" title="3.1 类与抽象类"></a>3.1 类与抽象类</h4><p>首先看一张图，这张图是引用《大话设计模式》书中的图，首先看‘动物’矩形框，它就代表一个类（class）。类图分为三层，第一层显示类的名称，如果是抽象类，就用斜体显示。第二层是类的特性，通常就是字段和属性。第三层是类的操作，通常是方法和行为。注意前面的符号，‘+’表示public，‘-’表示private，‘#’表示protected。</p>
+<p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml2.png" alt></p>
+<h4 id="3-2-接口"><a href="#3-2-接口" class="headerlink" title="3.2 接口"></a>3.2 接口</h4><p>然后看左下角的‘飞翔’，它表示一个接口图，与类图的区别主要是顶端有&lt;&lt; interface &gt;&gt;显示。第一行是接口名称，第二行是接口方法。接口还有另一种表示方法，俗称棒棒糖表示法，就是唐老鸭实现了‘讲人话’的接口。</p>
+<p><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml3.png" alt></p>
+<h4 id="3-3-继承"><a href="#3-3-继承" class="headerlink" title="3.3 继承"></a>3.3 继承</h4><p>接下来就说一下类与类，类与接口之间的关系了。首先注意动物、鸟、鸭、唐老鸭之间关系符号。因为他们都是继承关系，所以继承关系用空心三角形+实现来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml4.png" alt></p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="keyword">extends</span> <span class="title">Animal</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-4-实现"><a href="#3-4-实现" class="headerlink" title="3.4 实现"></a>3.4 实现</h4><p>这几种鸟中，大雁是最能飞的，它实现了飞翔接口。实现飞翔接口用空心三角形+虚线来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml5.png" alt></p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="symbol">WideGoose</span> <span class="symbol">implements</span> <span class="symbol">IFly</span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-5-关联（引用）"><a href="#3-5-关联（引用）" class="headerlink" title="3.5 关联（引用）"></a>3.5 关联（引用）</h4><p>然后是企鹅和气候两个类，企鹅是很特别的鸟，会游不会飞。更重要的是，它与气候有很大的关联。我们不去讨论为什么北极没有企鹅，为什么它们要每年长途跋涉。总之，企鹅需要‘知道’气候的变化，需要‘了解’气候规律。当一个类‘知道’另一个类是，可以用关联（association）。关联关系用实线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml6.png" alt></p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Penguin</span> <span class="keyword">extends</span> <span class="title">Bird</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="type">Climate</span> climate;<span class="comment">//在企鹅Penguin中，引用到气候Climate对象</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-6-聚合"><a href="#3-6-聚合" class="headerlink" title="3.6 聚合"></a>3.6 聚合</h4><p>再来看大雁与雁群这两个类，大雁是群居动物，每只大雁都是属于一个雁群，一个雁群可以有很多只大雁。所以它们之间就满足聚合（Aggregation）关系。聚合表示一种弱的‘拥有’关系，体现的是A对象可以包含B对象，但B对象不是A对象的一部分。聚合关系用空心的菱形+实线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml7.png" alt></p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="symbol">WideGooseAggregate</span>&#123;</span><br><span class="line">	<span class="keyword">private</span> WideGoose[] <span class="built_in">array</span>WideGoose;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-7-合成（组合）"><a href="#3-7-合成（组合）" class="headerlink" title="3.7 合成（组合）"></a>3.7 合成（组合）</h4><p>合成（Composition，也有翻译成‘组合’的）是一种强的‘拥有’关系，体现了严格的部分和整体的关系，部分和整体的生命周期一样。在这里鸟的其翅膀就是合成（组合）关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。合成关系用实心的菱形+实线箭头来表示。另外，你会注意到合成关系的连线两端还有一个数字‘1’和数字‘2’，这被称为基数。表明这一段的类可以有几个实例，很显然，一个鸟应该有两只翅膀。如果一个类可能有无数个实例，则就用‘n’来表示。关联关系、聚合关系也可以有基数的。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml8.png" alt></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bird</span>&#123;</span></span><br><span class="line">	<span class="keyword">private</span> Wing wing;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Bird</span><span class="params">()</span></span>&#123;</span><br><span class="line">		wing = <span class="keyword">new</span> Wing();<span class="comment">//在鸟Bird中，初始化时，实例化翅膀Wing，它们之间同时生成</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-8-依赖"><a href="#3-8-依赖" class="headerlink" title="3.8 依赖"></a>3.8 依赖</h4><p>动物几大特征，比如有新陈代谢，能繁殖。而动物要有生命力，需要氧气、水以及食物等。也就是说，动物依赖于氧气和水。他们之间是依赖关系，用虚线箭头来表示。<br><img src="/2018/09/13/%E7%BB%9F%E4%B8%80%E5%BB%BA%E6%A8%A1%E8%AF%AD%E8%A8%80-UML/uml9.png" alt></p>
+<figure class="highlight cs"><table><tr><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">Animal</span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Metabolism</span>(<span class="params">Oxygen oxygen, Water water</span>)</span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+        <category>UML</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>UML</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>架构设计原则</title>
+    <url>/2020/06/30/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
+    <content><![CDATA[<h2 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h2><p>开闭原则是指一个软件实体如类、模块和函数应该对扩展开放，对修改关闭。所谓的开闭，也正是对扩展和修改两个行为的一个原则。强调的是用抽象构建框架，用实现扩展细节。可以提高软件系统的可复用行及可维护性。开闭原则，是面向对象设计中最基础的设计原则。它知道我们如何建立稳定灵活的系统，例如：软件版本更新，尽可能不修改源代码，但是可以增加新功能。</p>
+<h2 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h2><p>依赖倒置原则是指设计代码结构时，高层模块不应该依赖底层模块，二者都应该依赖抽象。抽象不应该依赖细节；细节应该依赖抽象。通过依赖倒置，可以减少类与类之间的耦合性，提高系统的稳定性，提高代码的可读性和可维护性，并能降低修改程序所造成的风险。</p>
+<h2 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h2><p>单一职责是指不要存在多于一个导致类变更的原因。假设我们有一个Class负责两个职责，一旦发生需求变更，修改其中一个职责的逻辑代码，有可能会导致另一个职责的功能发生故障。这样依赖，这个Class存在两个导致类变更的原因。如何解释这个问题？我们就要给两个职责分别用两个Class来实现，进行解藕。后期需求变更维护互不影响。这样的设计，可以降低类的复杂度，提高类的可读性，提高系统的可维护性，降低变更引起的风险。总体来说就是一个Class/Interface/Method只负责一项职责。</p>
+<h2 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h2><p>接口隔离原则是指用多个专门的接口，而不是用单一的总接口，客户端不应该依赖它不需要的接口。这个原则指导我们在设计接口时应当注意以下几点：</p>
+<ol>
+<li>一个类对另一个类的依赖应该建立在最小的接口之上。</li>
+<li>建立单一接口，不要建立庞大臃肿的接口。</li>
+<li>尽量细化接口，接口中的方法尽量少。</li>
+<li>接口隔离原则符合我们常说的高内聚低耦合的设计思想，从而使得类具有很好的可读性、可扩展性和可维护性。在设计接口的时候，要多花时间去思考，要考虑业务模型，包括以后有可能发生变更的地方还要做一个预判。所以，对于抽象，对业务模型的理解是非常重要的。</li>
+</ol>
+<h2 id="迪米特法则"><a href="#迪米特法则" class="headerlink" title="迪米特法则"></a>迪米特法则</h2><p>迪米特法则是指一个对象应该对其他对象保持最少的了解，又叫最少知道原则，尽量降低类与类之间的耦合。迪米特法则主要强调只和朋友交流，不和陌生人手滑。出现在成员变量、方法输入、输出参数重的类都可以称之为成员朋友类，而出现在方法体内部的类不属于朋友类。</p>
+<h2 id="里式替换原则"><a href="#里式替换原则" class="headerlink" title="里式替换原则"></a>里式替换原则</h2><p>里式替换原则是指如果对每一个类型为T1的对象o1，都有类型为T2的对象o2，使得以T1定义的所有程序的对象o1都能替换成o2时，那程序的行为没有发生变化，那么类型T2室类型T1的字类型。<br>定义看上去还是比较抽象，可以理解为一个软件实体如果适用于一个父类的话，那么一定是适用于其子类，所有引用父类的地方必须能透明的使用其子类的对象，子类对象能够替换父类对象，而程序逻辑不变。根据这个理解，总结：子类可以扩展父类的功能，但不能改变父类原有的功能。</p>
+<ol>
+<li>子类可以实现父类的抽象方法，但不能覆盖父类的非抽象方法。</li>
+<li>子类可以增加自己特有的方法。</li>
+<li>当子类的方法重载父类的方法时，方法的前置条件要比父类方法的输入参数更宽松。</li>
+<li>当子类的方法实现父类的方法时，方法的后置条件要比父类更严格或相等。</li>
+</ol>
+<p>使用里式替换原则有以下优点：</p>
+<ol>
+<li>约束继承泛滥，开闭原则的一种体现，</li>
+<li>加强程序的健壮性，同时变更也可以做到非常好的兼容性，提高程序的维护性、扩展性。降低需求变更时引入的风险。</li>
+</ol>
+<h2 id="合成复用原则"><a href="#合成复用原则" class="headerlink" title="合成复用原则"></a>合成复用原则</h2><p>合成复用原则是指尽量使用对象组合/聚合，而不是继承关系达到软件复用的目的。可以使系统更加灵活，降低类与类之间的耦合度，一个类的变化对其他类造成的影响相对较少。<br>继承可以理解为白箱复用，相当于把所有的实现细节暴露给子类。组合/聚合也称之为黑箱复用，对类意外的对象是无法获取到实现细节的。要根据具体的业务场景来做代码设计，其实也都需要遵循OOP模型。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在实际开发过程中，并不是一定要求所有代码都遵循设计原则，我们要考虑人力、时间、成本、质量，不是可以追求完美，要在适当的场景遵循设计原则，体现的是一种平衡取舍，帮助我们设计处更加优雅的代码。</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>设计模式</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+</search>
